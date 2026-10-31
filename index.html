@@ -57,11 +57,11 @@
   @keyframes float { 50% { transform: translate(-50%, -52%); } }
 
   /* ---------- kategori ---------- */
-  #s-kategori .small { font: 800 44px/1 var(--body); letter-spacing: .5em; text-transform: uppercase; margin-bottom: 26px; }
-  #s-kategori .big { font: 400 250px/1 var(--display); color: var(--navy); -webkit-text-stroke: 0; text-shadow: 10px 10px 0 var(--green), 20px 20px 0 var(--blue); margin: 40px 0 70px; }
-  #s-kategori .cabang { margin-top: 10px; display: flex; gap: 24px; }
-  #s-kategori .cabang .chip { font-size: 30px; padding: 14px 34px; opacity: .45; }
-  #s-kategori .cabang .chip.now { opacity: 1; background: var(--green); color: var(--navy); }
+  .kat-slide .small { font: 800 44px/1 var(--body); letter-spacing: .5em; text-transform: uppercase; margin-bottom: 26px; }
+  .kat-slide .big { font: 400 var(--fs, 250px)/1.02 var(--display); max-width: 1700px; text-transform: uppercase; color: var(--navy); -webkit-text-stroke: 0; text-shadow: 10px 10px 0 var(--green), 20px 20px 0 var(--blue); margin: 40px 0 70px; }
+  .kat-slide .cabang { margin-top: 10px; display: flex; gap: 20px; }
+  .kat-slide .cabang .chip { font-size: 26px; padding: 12px 28px; opacity: .45; }
+  .kat-slide .cabang .chip.now { opacity: 1; background: var(--green); color: var(--navy); }
 
   /* ---------- teaser ---------- */
   .ring { position: absolute; left: 50%; top: 50%; width: 560px; height: 560px; margin: -280px 0 0 -280px; border-radius: 50%;
@@ -133,8 +133,8 @@
   canvas.confetti { position: absolute; inset: 0; pointer-events: none; }
 
   /* ---------- penutup ---------- */
-  #s-closing .head { position: absolute; top: 62px; left: 0; right: 0; text-align: center; font: 400 70px/1 var(--display); }
-  #s-closing .head small { display: block; font: 800 28px/1 var(--body); letter-spacing: .45em; margin-bottom: 16px; color: var(--blue); }
+  .closing-slide .head { position: absolute; top: 62px; left: 0; right: 0; text-align: center; font: 400 70px/1 var(--display); }
+  .closing-slide .head small { display: block; font: 800 28px/1 var(--body); letter-spacing: .45em; margin-bottom: 16px; color: var(--blue); }
   .podium { position: absolute; left: 0; top: 0; width: 1920px; height: 815px; }
   .pod { position: absolute; bottom: 0; width: 470px; height: var(--h); }
   .pod .block { position: absolute; inset: 0; background: linear-gradient(180deg, #17336a, var(--navy)); border-top: 16px solid var(--green);
@@ -167,23 +167,7 @@
     <img class="logo" src="assets/logo-awarding.png" alt="Awarding Mythic 3.0">
   </section>
 
-  <!-- 1. kategori -->
-  <section class="slide" id="s-kategori">
-    <div class="center">
-      <div class="small pop">Awarding Mythic 3.0</div>
-      <div class="chip green pop" style="--d:.25s"><span>KATEGORI LOMBA</span></div>
-      <div class="big pop" id="kat-nama" style="--d:.55s"></div>
-      <div class="cabang pop" id="kat-cabang" style="--d:.9s"></div>
-    </div>
-  </section>
-
   <div id="dyn"></div>
-
-  <!-- penutup -->
-  <section class="slide" id="s-closing">
-    <div class="head pop"><small>AWARDING MYTHIC 3.0 · KATEGORI <span id="cl-kat"></span></small>SELAMAT KEPADA PARA JUARA</div>
-    <div class="podium" id="podium"></div>
-  </section>
 
   <div class="sponsor" id="sponsor"></div>
 
@@ -192,18 +176,28 @@
 
 <script>
 /* ===================== DATA (edit di sini) ===================== */
-const EVENT = {
-  kategori: "BOB",
-  cabang: ["BOB", "Mobile Legends", "Inotech"],   // yang sedang diumumkan = kategori
-  juara: [
+// urutan = urutan pengumuman. tim boleh dikosongkan (Mobile Legends = nama sekolah); skor & anggota boleh dikosongkan.
+const EVENT = { kategori: [
+  { nama: "Battle of Brain", label: "Battle of Brain", juara: [
     { rank: 1, tim: "Vladimir Angkason", skor: "269,35", sekolah: "SMK IDN Boarding School Solo",
       anggota: ["Rahmad Arifin Susilo", "Muhammad Hideaki I.", "Aditya Putra Mustofa"] },
     { rank: 2, tim: "Tahu Tech", skor: "266,45", sekolah: "SMAN 2 Mejayan",
       anggota: ["M. Rizky Husein F.", "Bariq Akram", "Samuel Satria W."] },
     { rank: 3, tim: "Conquest", skor: "250,75", sekolah: "SMA Islam Al-Azhar 4 Kemenag Pratama Bekasi",
-      anggota: ["Muhammad Zhafran A.", "Kirany Safia Karen", "Kennard Yusuf Mahardika"] },
-  ],
-};
+      anggota: ["Muhammad Zhafran A.", "Kirany Safia Karen", "Kennard Yusuf Mahardika"] } ] },
+  { nama: "Innovation Technology Pelajar", label: "Inotech Pelajar", juara: [
+    { rank: 1, tim: "TutuTitut", sekolah: "SMK Negeri 2 Klaten" },
+    { rank: 2, tim: "captcha Kaki 3", sekolah: "SMA Islam Al-Azhar 4 Kemenag Pratama Bekasi" },
+    { rank: 3, tim: "Walahwe Team", sekolah: "SMA Negeri 1 Geger" } ] },
+  { nama: "Innovation Technology Mahasiswa", label: "Inotech Mahasiswa", juara: [
+    { rank: 1, tim: "ARD", sekolah: "Universitas Brawijaya" },
+    { rank: 2, tim: "Sekawan", sekolah: "Universitas Sebelas Maret" },
+    { rank: 3, tim: "BAJIRUT", sekolah: "UIN Walisongo Semarang" } ] },
+  { nama: "Mobile Legends", label: "Mobile Legends", juara: [
+    { rank: 1, sekolah: "SMAN 1 Kertosono" },
+    { rank: 2, sekolah: "SMAN 2 Mojokerto" },
+    { rank: 3, sekolah: "SMAN 2 Madiun" } ] },
+] };
 
 /* ===================== AUDIO (disintesis, tanpa file) =====================
    Kalau ada file di audio/ (drumroll.mp3, jeng.mp3, popper.mp3, fanfare.mp3, applause.mp3), file itu dipakai menggantikan suara sintetis. */
@@ -333,68 +327,82 @@ const letters = t => [...t].map((ch, i) => `<span style="--i:${i}">${ch === " " 
 const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 const ORD = { 3: "TIGA", 2: "DUA", 1: "SATU" };
 
-$("#kat-nama").textContent = EVENT.kategori;
-$("#kat-cabang").innerHTML = EVENT.cabang.map(c => `<div class="chip ${c === EVENT.kategori ? "now" : ""}"><span>${esc(c)}</span></div>`).join("");
-
 const dyn = $("#dyn");
-const byRank = r => EVENT.juara.find(j => j.rank === r);
-for (const r of [3, 2, 1]) {
-  const j = byRank(r); if (!j) continue;
-  const fs = j.tim.length <= 10 ? 190 : j.tim.length <= 14 ? 150 : j.tim.length <= 18 ? 118 : 92;
+const CROWN = `<svg class="crown" viewBox="0 0 120 80"><path d="M8 66 L2 14 L36 40 L60 4 L84 40 L118 14 L112 66 Z" fill="#ffc93c" stroke="#0e2347" stroke-width="5" stroke-linejoin="round"/><rect x="8" y="66" width="104" height="10" fill="#0e2347"/></svg>`;
+const POD = { 1: { x: 725, h: 320, n: 190, bd: 1.0, id: 1.7 }, 2: { x: 250, h: 235, n: 140, bd: 0.5, id: 1.2 }, 3: { x: 1200, h: 170, n: 100, bd: 0.1, id: 0.8 } };
+const mainName = j => j.tim || j.sekolah;             // tanpa nama tim -> nama sekolah jadi judul
+
+EVENT.kategori.forEach((K, c) => {
+  const byRank = r => K.juara.find(j => j.rank === r);
+  const kfs = K.nama.length <= 10 ? 250 : K.nama.length <= 18 ? 170 : 124;
   dyn.insertAdjacentHTML("beforeend", `
-  <section class="slide teaser" id="s-t${r}"><div class="vig"></div><div class="center">
+  <section class="slide kat-slide" id="s-k${c}"><div class="center">
+    <div class="small pop">Awarding Mythic 3.0</div>
+    <div class="chip green pop" style="--d:.25s"><span>KATEGORI LOMBA</span></div>
+    <div class="big pop" style="--d:.55s; --fs:${kfs}px">${esc(K.nama)}</div>
+    <div class="cabang pop" style="--d:.9s">${EVENT.kategori.map(o => `<div class="chip ${o === K ? "now" : ""}"><span>${esc(o.label)}</span></div>`).join("")}</div>
+  </div></section>`);
+
+  for (const r of [3, 2, 1]) {
+    const j = byRank(r); if (!j) continue;
+    const nm = mainName(j), fs = nm.length <= 10 ? 190 : nm.length <= 14 ? 150 : nm.length <= 18 ? 118 : 92;
+    dyn.insertAdjacentHTML("beforeend", `
+  <section class="slide teaser" id="s-t${c}-${r}"><div class="vig"></div><div class="center">
     <div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div>
     <div class="num">${r}</div>
     <div class="line">${letters(`JUARA ${r} DIPEROLEH OLEH`)}</div>
     <div class="dots"><i>●</i><i>●</i><i>●</i></div>
   </div></section>
-  <section class="slide lights-slide" id="s-l${r}"><div class="lights">${beams(r)}</div></section>
-  <section class="slide reveal ${r === 1 ? "gold" : ""}" id="s-r${r}"><div class="center">
-    <div class="chip ${r === 1 ? "green" : "blue"} pop"><span>JUARA ${r} · ${esc(EVENT.kategori)}</span></div>
-    <div class="name" style="font-size:${fs}px">${letters(j.tim)}</div>
-    <div class="school pop" style="--d:.7s">${esc(j.sekolah)}</div>
-    <div class="chip green pop" style="--d:.95s"><span>SKOR ${esc(j.skor)}</span></div>
-    <div class="members">${j.anggota.map((a, i) => `<div class="chip pop" style="--d:${1.2 + i * .18}s"><span>${esc(a)}</span></div>`).join("")}</div>
+  <section class="slide lights-slide" id="s-l${c}-${r}"><div class="lights">${beams(r)}</div></section>
+  <section class="slide reveal ${r === 1 ? "gold" : ""}" id="s-r${c}-${r}"><div class="center">
+    <div class="chip ${r === 1 ? "green" : "blue"} pop"><span>JUARA ${r} · ${esc(K.label)}</span></div>
+    <div class="name" style="font-size:${fs}px">${letters(nm)}</div>
+    ${j.tim ? `<div class="school pop" style="--d:.7s">${esc(j.sekolah)}</div>` : ""}
+    ${j.skor ? `<div class="chip green pop" style="--d:.95s"><span>SKOR ${esc(j.skor)}</span></div>` : ""}
+    ${j.anggota ? `<div class="members">${j.anggota.map((a, i) => `<div class="chip pop" style="--d:${1.2 + i * .18}s"><span>${esc(a)}</span></div>`).join("")}</div>` : ""}
   </div>
   <div class="dark"></div><div class="flash"></div>
   <canvas class="confetti" width="1920" height="1080"></canvas></section>`);
-}
+  }
 
-$("#cl-kat").textContent = EVENT.kategori;
-const POD = { 1: { x: 725, h: 320, n: 190, bd: 1.0, id: 1.7 }, 2: { x: 250, h: 235, n: 140, bd: 0.5, id: 1.2 }, 3: { x: 1200, h: 170, n: 100, bd: 0.1, id: 0.8 } };
-const CROWN = `<svg class="crown" viewBox="0 0 120 80"><path d="M8 66 L2 14 L36 40 L60 4 L84 40 L118 14 L112 66 Z" fill="#ffc93c" stroke="#0e2347" stroke-width="5" stroke-linejoin="round"/><rect x="8" y="66" width="104" height="10" fill="#0e2347"/></svg>`;
-$("#podium").innerHTML = [2, 1, 3].map(byRank).filter(Boolean).map(j => {
-  const P = POD[j.rank], fs = j.tim.length <= 10 ? 56 : j.tim.length <= 14 ? 48 : 42;
-  return `<div class="pod ${j.rank === 1 ? "first" : ""}" style="left:${P.x}px; --h:${P.h}px; --n:${P.n}px; --bd:${P.bd}s; --id:${P.id}s; --fs:${fs}px">
-    <div class="info">${j.rank === 1 ? CROWN : ""}<div class="tim">${esc(j.tim)}</div><div class="sek">${esc(j.sekolah)}</div>
-      <div class="chip ${j.rank === 1 ? "green" : "blue"}"><span>SKOR ${esc(j.skor)}</span></div></div>
+  const pods = [2, 1, 3].map(byRank).filter(Boolean).map(j => {
+    const P = POD[j.rank], nm = mainName(j), fs = nm.length <= 10 ? 56 : nm.length <= 14 ? 48 : 42;
+    return `<div class="pod ${j.rank === 1 ? "first" : ""}" style="left:${P.x}px; --h:${P.h}px; --n:${P.n}px; --bd:${P.bd}s; --id:${P.id}s; --fs:${fs}px">
+    <div class="info">${j.rank === 1 ? CROWN : ""}<div class="tim">${esc(nm)}</div>${j.tim ? `<div class="sek">${esc(j.sekolah)}</div>` : ""}
+      ${j.skor ? `<div class="chip ${j.rank === 1 ? "green" : "blue"}"><span>SKOR ${esc(j.skor)}</span></div>` : ""}</div>
     <div class="block"><b>${j.rank}</b></div></div>`;
-}).join("");
+  }).join("");
+  dyn.insertAdjacentHTML("beforeend", `
+  <section class="slide closing-slide" id="s-c${c}">
+    <div class="head pop"><small>AWARDING MYTHIC 3.0 · ${esc(K.nama)}</small>SELAMAT KEPADA PARA JUARA</div>
+    <div class="podium">${pods}</div>
+  </section>`);
+});
 
 const SPONSOR_HTML = `<div class="sp-text">SPONSORED <b>BY</b></div><img class="sp-logos" src="assets/sponsor.png" alt="">`;
 document.querySelectorAll(".sponsor").forEach(el => el.innerHTML = SPONSOR_HTML);
 
 /* urutan slide; tiap slide: id, aksi saat masuk */
-const slides = [
-  { id: "s-idle" },
-  { id: "s-kategori", sound: () => { sfx.whoosh(); sfx.jeng(); } },
-];
-for (const r of [3, 2, 1]) {
-  if (!byRank(r)) continue;
-  slides.push({ id: `s-t${r}`, sound: () => sfx.drumroll(10) });
-  slides.push({ id: `s-l${r}`,                                          // lampu sorot: tahan sampai kita geser kanan lagi
-    sound: () => {
-      [0.15, 0.45, 0.75, ...(r === 1 ? [1.0, 1.15] : [])].forEach(t => sfx.lamp(t));
-      later(950, () => sfx.whoosh());
-    },
-    enter: () => stage.classList.add("blackout") });
-  slides.push({ id: `s-r${r}`,                                          // nama juara muncul
-    sound: () => {
-      stage.classList.add("blackout"); later(700, () => stage.classList.remove("blackout"));
-      later(350, () => { sfx.popper(0); confetti(r === 1 ? 1 : 0.55); sfx.fanfare(r !== 1); });
-    } });
-}
-slides.push({ id: "s-closing", sound: () => { sfx.whoosh(); sfx.applause(10); } });   // tepuk tangan hanya di podium
+const slides = [{ id: "s-idle" }];
+EVENT.kategori.forEach((K, c) => {
+  slides.push({ id: `s-k${c}`, sound: () => { sfx.whoosh(); sfx.jeng(); } });
+  for (const r of [3, 2, 1]) {
+    if (!K.juara.find(j => j.rank === r)) continue;
+    slides.push({ id: `s-t${c}-${r}`, sound: () => sfx.drumroll(10) });
+    slides.push({ id: `s-l${c}-${r}`,                                    // lampu sorot: tahan sampai kita geser kanan lagi
+      sound: () => {
+        [0.15, 0.45, 0.75, ...(r === 1 ? [1.0, 1.15] : [])].forEach(t => sfx.lamp(t));
+        later(950, () => sfx.whoosh());
+      },
+      enter: () => stage.classList.add("blackout") });
+    slides.push({ id: `s-r${c}-${r}`,                                    // nama juara muncul
+      sound: () => {
+        stage.classList.add("blackout"); later(700, () => stage.classList.remove("blackout"));
+        later(350, () => { sfx.popper(0); confetti(r === 1 ? 1 : 0.55); sfx.fanfare(r !== 1); });
+      } });
+  }
+  slides.push({ id: `s-c${c}`, sound: () => { sfx.whoosh(); sfx.applause(10); } });   // tepuk tangan hanya di podium
+});
 slides.forEach(s => s.el = document.getElementById(s.id));
 
 /* loop sponsor: teks masuk, keluar, logo masuk, keluar, ulang */
