@@ -50,8 +50,8 @@
   .sp-logos.out { opacity: 0; transform: translate(-50%, -85%) scale(1.04); filter: blur(8px); }
 
   /* ---------- idle ---------- */
-  #s-idle .inst { position: absolute; top: 118px; left: 660px; width: 600px; }   /* tengah = 960; tanpa transform karena animasi pop menimpanya */
-  #s-idle .logo { position: absolute; left: 50%; top: 480px; width: 1150px; transform: translate(-50%, -50%); }
+  .idle-slide .inst { position: absolute; top: 118px; left: 660px; width: 600px; }   /* tengah = 960; tanpa transform karena animasi pop menimpanya */
+  .idle-slide .logo { position: absolute; left: 50%; top: 480px; width: 1150px; transform: translate(-50%, -50%); }
   .on .logo { animation: logoIn 1.1s cubic-bezier(.2, 1.2, .4, 1) both, float 5s ease-in-out 1.2s infinite; }
   @keyframes logoIn { from { opacity: 0; transform: translate(-50%, -50%) scale(.6) rotate(-4deg); } to { opacity: 1; transform: translate(-50%, -50%); } }
   @keyframes float { 50% { transform: translate(-50%, -52%); } }
@@ -162,7 +162,7 @@
 <div id="stage">
 
   <!-- 0. idle -->
-  <section class="slide" id="s-idle">
+  <section class="slide idle-slide" id="s-idle">
     <img class="inst pop" src="assets/institusi.png" alt="">
     <img class="logo" src="assets/logo-awarding.png" alt="Awarding Mythic 3.0">
   </section>
@@ -403,6 +403,9 @@ EVENT.kategori.forEach((K, c) => {
   }
   slides.push({ id: `s-c${c}`, sound: () => { sfx.whoosh(); sfx.applause(10); } });   // tepuk tangan hanya di podium
 });
+// slide penutup: sama dengan slide pembuka (logo Awarding + institusi), sponsor tetap jalan
+const endSlide = document.getElementById("s-idle").cloneNode(true); endSlide.id = "s-end"; dyn.appendChild(endSlide);
+slides.push({ id: "s-end", sound: () => sfx.whoosh() });
 slides.forEach(s => s.el = document.getElementById(s.id));
 
 /* loop sponsor: teks masuk, keluar, logo masuk, keluar, ulang */
